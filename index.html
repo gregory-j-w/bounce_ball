@@ -8,9 +8,30 @@
   crossorigin='anonymous'></script>
 </head>
 <body>
-  <canvas id='myCanvas'></canvas>
-  <button id='reset'>Reset</button>
-  <button id='stop'>Stop</button>
+  <div class = "container">
+    <div class = "header">
+      <h1 id = "title">Game Name</h1>
+    </div>
+    <div class = "game">
+      <div class = "scoreboard">
+      	<div id = "lives">Lives: XXXX</div>
+        <div id = "score">Score: 100,000</div>
+        <div id = "timer">Time: 3:00</div>
+      </div>
+      <div class = "gamewindow">
+        <canvas id='myCanvas'></canvas>
+      </div>
+      <div class = "instructions">
+        <p> move paddle with left or right key!</p>
+      </div>
+    </div>
+    <div id = "text controlls">
+      <button id='reset'>Reset</button>
+      <button id='stop'>Stop</button>
+<!--    </div>
+      <div class = "footer">
+      <p>&copy; 2017 <a href = "#">Green Slash Development</a></p>
+  </div> !-->
   <script rel= 'javascript' src = 'js/main.js'></script>
 </body>
 </html>

@@ -1,4 +1,58 @@
+/*
+* {
+	border: 1px solid black;
+}
+*/
+
 canvas {
 	background-color: beige;
 }
 
+#container {
+	display: flex;
+}
+
+# header {
+
+}
+
+.title {
+	text-align: center;
+	text-transform: capitalize;
+}
+
+.game {
+	width: 100%;
+	min-width: 400px,
+}
+
+.scoreboard {
+	display: flex;
+	
+}
+
+.gamewindow {
+
+}
+
+#myCanvas {
+
+}
+
+
+.instructions {
+
+}
+
+p {
+
+}
+
+.footer {}
+
+}
+
+a {
+	color: green;
+	font-weight: bold;
+}
