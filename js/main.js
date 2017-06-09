@@ -48,9 +48,9 @@ var ball = {
     }else if (ball.location.x <= 10){
       ball.direction.tx = ball.direction.tx + 2;
       //ball.direction.ty = ball.direction.ty;  -- add back later once bounce angles are figured out
-      ball.ballLoc = {x: ball.ballLoc.x + ball.ballDirection.tx, y: ball.ballLoc.y + ball.ballDirection.ty};
+      ball.location = {x: ball.location.x + ball.direction.tx, y: ball.location.y + ball.direction.ty};
     } else {
-      ball.ballLoc = {x: ball.ballLoc.x + ball.ballDirection.tx, y: ball.ballLoc.y + ball.ballDirection.ty};
+      ball.location = {x: ball.location.x + ball.direction.tx, y: ball.location.y + ball.direction.ty};
     }
   }
 }
