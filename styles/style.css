@@ -1,4 +1,19 @@
 canvas {
-	background-color: beige;
+	background-color: rgb(180, 180, 180);
 }
 
+
+/*
+<div class = "container">
+	<div class = "canvas">
+		<canvas id='myCanvas'></canvas>
+	</div>
+	<div id = "scoreboard">
+		<div id = "lives">
+			<h4>Turns:</h4>
+			<img id = "life1">X</img>
+			<img id = "life2">X</img>
+			<img id = "life3">X</img>
+		</div>
+		<div id = "score"> 10,000
+	*/

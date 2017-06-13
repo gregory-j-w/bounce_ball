@@ -8,9 +8,21 @@
   crossorigin='anonymous'></script>
 </head>
 <body>
-  <canvas id='myCanvas'></canvas>
-  <button id='reset'>Reset</button>
-  <button id='stop'>Stop</button>
-  <script rel= 'javascript' src = 'js/main.js'></script>
+  <div class = "container">
+    <div class = "canvas">
+      <canvas id='myCanvas'></canvas>
+    </div>
+    <div id = "scoreboard">
+      <div id = "lives">
+        <h4>Turns:</h4>
+        <img id = "life1">X</img>
+        <img id = "life2">X</img>
+        <img id = "life3">X</img>
+      </div>
+      <div id = "score"> 10,000
+      </div>
+    </div>
+  </div>
+  <script rel= 'javascript' src = 'js/safe.js'></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 var canvas = document.getElementById('myCanvas');
 var ctx = canvas.getContext('2d');
 
-//create canvas with height and width
+//CANVAS_________
 //adjust to screen size but height = width, then the other elements adjust accordingly
 var canvasSize = {
   width: 600,
@@ -13,21 +13,33 @@ var drawCanvas = function() {
 };
 drawCanvas();
 
-//create and add the paddle to the screen
+//SCOREBOARD_____
+var game = {
+  lives: 0,
+  score: 0,
+  init: function() {
+    lives = 3;
+    score = 0
+  }
+}
+//append to document
+
+
+//PADDLE_________
 var paddle = {
   loc:{},
   width: 100,
   height: 15,
   dir: "",
   speed: 4,
-
   init: function(){
-    this.loc = {x: canvasSize.width/2, y: canvasSize.height - 25}
+    this.loc = {x: (canvasSize.width-paddle.width)/2, y: canvasSize.height - 40};
+    this.dir = "";
   },
   draw: function(){
     ctx.beginPath();
     ctx.rect((paddle.loc.x), (paddle.loc.y), paddle.width, paddle.height)
-    ctx.fillStyle = "blue";
+    ctx.fillStyle = 'rgb(25,75,130)';
     ctx.fill();
   },
   //paddle controls left or right
@@ -43,7 +55,7 @@ var paddle = {
     }
   }
 }
-//padde controls
+//padde event listener
 document.addEventListener('keydown', function(event){
   var key = event.which;
   if(key === 39){
@@ -53,7 +65,7 @@ document.addEventListener('keydown', function(event){
   }
 });
 
-//create ball
+//BALL___________
 var ball = {
   loc: {},
   r: 10,
@@ -64,12 +76,11 @@ var ball = {
     ball.dir.x = 2;
     ball.dir.y = 2;
   },
-//create function to draw the ball w/10 radius
   draw: function() {
     ctx.beginPath();
     ctx.arc(ball.loc.x, ball.loc.y, ball.r, 0, Math.PI * 2, true);
     ctx.closePath();
-    ctx.fillStyle = "green";
+    ctx.fillStyle = 'rgb(170,10,10)';
     ctx.fill();
   },
   move: function() {
@@ -77,12 +88,13 @@ var ball = {
     if (ball.loc.y + ball.dir.y - ball.r <= 0) {
       ball.dir.y = -ball.dir.y;
     }
-    //check for collision with bottom/game over
+    //check for collision with bottom/turn over
     if (ball.loc.y + ball.dir.y + ball.r > canvasSize.height) {
       ball.loc.x = ball.loc.x;
       ball.dir.x = 0;
-      ball.loc.y = canvasSize.height-ball.r;
+      ball.loc.y = canvasSize.height - ball.r;
       ball.dir.y = 0;
+      turnOver();
     }
     //check for collision with sides
     if (ball.loc.x + ball.dir.x - ball.r < 0){
@@ -94,13 +106,12 @@ var ball = {
     //check for collision with paddle
     //if ball location is at least paddle y loc
     if (ball.loc.y + ball.dir.y + ball.r >= paddle.loc.y) {
-      //and if the ball loc is on the paddle
+      //and if the ball x loc is on the paddle
       if (ball.loc.x + ball.dir.x >= paddle.loc.x
         &&
         ball.loc.x + ball.dir.x <= paddle.loc.x + paddle.width) {
           ball.dir.y = - ball.dir.y;
         }
-
     }
     ball.loc.x = ball.loc.x + ball.dir.x;
     ball.loc.y = ball.loc.y + ball.dir.y;
@@ -108,10 +119,30 @@ var ball = {
 }
 
 //add the ball, paddle to the screen
+
+game.init();
 paddle.init();
 paddle.draw();
 ball.init();
 ball.draw();
+
+function gameStart() {
+  if(lives > 0) {
+    document.addEventListener('keydown', function(event){
+      var key = event.which;
+      if (key === 32) {
+        animateCanvas();
+      }
+      else {
+      }
+    })
+  }
+  else {
+    alert("game over");
+  }
+};
+gameStart();
+
 
 //animate the canvas
 var animateCanvas = function() {
@@ -123,27 +154,14 @@ var animateCanvas = function() {
   window.requestAnimationFrame(animateCanvas);
 }
 
-//add eventlister to start the process, calling the functions
-canvas.addEventListener('click', function() {
-  animateCanvas();
-});
-
-//testing reset button to restart the ball at the original location.
-var reset = document.getElementById('reset').addEventListener('click', function(){
-  ball.direction.tx = 2;
-  ball.direction.ty = -2;
-  ball.location.x = "";
-  ball.location.y = "";
-});
-
-//stop button
-var stop = document.getElementById('stop').addEventListener('click', function(){
-  ball.direction.tx = 0;
-  ball.direction.ty = 0;
-  ball.location.x = ball.location.x + ball.direction.tx;
-  ball.location.y = ball.location.y + ball.direction.ty;
-});
-
-
+var turnOver = function() {
+  alert("D'oh");
+  paddle.init();
+  paddle.draw();
+  ball.init();
+  ball.draw();
+  lives --;
+  gameStart();
+}
 //
 //paddle collision
