@@ -133,13 +133,13 @@ var ball = {
     //check for collision with bricks
     for (i = 0; i < brick.loc.length; i++) {
       //if ball.loc x is greater than brick x location
-      if (ball.loc.x + ball.dir.x + ball.r >= brick.loc[i][0] &&
+      if (ball.loc.x + ball.dir.x + ball.r > brick.loc[i][0] &&
         //and ball.loc x is less than brick x location + brick.width
-        ball.loc.x + ball.dir.x - ball.r <= brick.loc[i][0] + brick.width &&
+        ball.loc.x + ball.dir.x - ball.r < brick.loc[i][0] + brick.width &&
         //and ball.loc y is less than brick y loc
-        ball.loc.y + ball.dir.y + ball.r >= brick.loc[i][1] &&
+        ball.loc.y + ball.dir.y + ball.r < brick.loc[i][1] &&
         //and ball.loc y is greater than brick y loc + brick.height
-        ball.loc.y + ball.dir.y - ball.r <= brick.loc[i][1] + brick.height) {
+        ball.loc.y + ball.dir.y - ball.r > brick.loc[i][1] + brick.height) {
           //check if ball hit brick - dir.x
           if (ball.loc.x + ball.r < brick.loc[i][0] ||
             ball.loc.x - ball.r > brick.loc[i][0] + brick.width &&
@@ -153,15 +153,14 @@ var ball = {
               brick.destroyed.push(brick.loc[i]);
           }
           if (ball.loc.y + ball.r < brick.loc[i][1] ||
-            ball.loc.y - ball.r > brick.loc[i][1] + brick.height &&
+            ball.loc.y - ball.r > brick.loc[i][1] &&
             ball.loc.x + ball.r >= brick.loc[i][0] &&
-            ball.loc.x - ball.r <= brick.loc[i][0] + brick.width) {
+            ball.loc.x - ball.r <= brick.loc[i][0]) {
               ball.dir.y = -ball.dir.y;
               brick.hit();
               brick.destroyed.push(brick.loc[i]);
             }
         }
-        console.log("brick check");
     }
     ball.loc.x = ball.loc.x + ball.dir.x;
     ball.loc.y = ball.loc.y + ball.dir.y;
@@ -210,7 +209,6 @@ ball.init();
 ball.draw();
 brick.draw();
 brick.hit();
-gameStart();
 
 function gameStart() {
   if(lives > 0) {
@@ -229,6 +227,7 @@ function gameStart() {
     //alert("game over");
   }
 };
+gameStart();
 
 //animate the canvas
 var animateCanvas = function() {
@@ -251,6 +250,7 @@ var turnOver = function() {
   ball.draw();
   lives --;
   gameStart();
+  lifeDisplay();
 }
 //
 //paddle collision
