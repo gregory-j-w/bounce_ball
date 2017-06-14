@@ -1,7 +1,14 @@
+/*
+* {
+	border: 1px solid black;
+}
+*/
+
 canvas {
 	background-color: rgb(180, 180, 180);
 }
 
+<<<<<<< HEAD
 * {
 	border: 1px solid black;
 }
@@ -28,3 +35,53 @@ img {
 		</div>
 		<div id = "score"> 10,000
 	*/
+=======
+#container {
+	display: flex;
+}
+
+# header {
+
+}
+
+.title {
+	text-align: center;
+	text-transform: capitalize;
+}
+
+.game {
+	width: 100%;
+	min-width: 400px,
+}
+
+.scoreboard {
+	display: flex;
+	
+}
+
+.gamewindow {
+
+}
+
+#myCanvas {
+
+}
+
+
+.instructions {
+
+}
+
+p {
+
+}
+
+.footer {}
+
+}
+
+a {
+	color: green;
+	font-weight: bold;
+}
+>>>>>>> 0a8f326018fbce1b2af07289bdcafa27cddbcd31
