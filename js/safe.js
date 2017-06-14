@@ -151,7 +151,6 @@ var ball = {
               //return hit - delete brick, add to score
               brick.destroyed.push(brick.loc[i]);
               brick.hit();
-
           }
           else if (ball.loc.y + ball.r < brick.loc[i][1] ||
             ball.loc.y - ball.r > brick.loc[i][1] + brick.height &&
@@ -173,12 +172,7 @@ var ball = {
 var brick = {
   width: 53,
   height: 25,
-  loc: [
-    [10, 10], [68, 10], [126, 10], [184, 10], [242, 10], [300, 10], [358, 10], [416, 10], [474, 10], [532, 10],
-    [10, 50], [68, 50], [126, 50], [184, 50], [242, 50], [300, 50], [358, 50], [416, 50], [474, 50], [532, 50],
-    [10, 90], [68, 90], [126, 90], [184, 90], [242, 90], [300, 90], [358, 90], [416, 90], [474, 90], [532, 90],
-    [10, 130], [68, 130], [126, 130], [184, 130], [242, 130], [300, 130], [358, 130], [416, 130], [474, 130], [532, 130]
-  ],
+  loc: [],
   //array of bricks that have been hit
   destroyed: [],
   init: function() {
@@ -198,19 +192,15 @@ var brick = {
         ctx.fill();
       };
   },
-  hit: function (){
+  hit: function() {
     score++;
     for (i = 0; i < brick.destroyed.length; i++) {
-      ctx.clearRect(brick.destroyed[i][0], brick.destroyed[i][1], brick.width, brick.height);
+      brick.loc = brick.loc.filter(function(event) {
+        return event !== brick.destroyed[i];
+      })
     }
-    // for loop to filter brick.loc and remove arrays in bricks.destroyed
   }
 } //end brick
-
-
-
-
-
 
 //add the ball, paddle to the screen
 game.init();
@@ -218,8 +208,8 @@ paddle.init();
 paddle.draw();
 ball.init();
 ball.draw();
-brick.draw();
 brick.init();
+brick.draw();
 gameStart();
 
 function gameStart() {
