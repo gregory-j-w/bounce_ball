@@ -69,9 +69,9 @@ var ball = {
   dir: {},
   init: function() {
     ball.loc.x = canvasSize.width/2;
-    ball.loc.y = canvasSize.height/2;
+    ball.loc.y = canvasSize.height - 50;
     ball.dir.x = 2;
-    ball.dir.y = 2;
+    ball.dir.y = -2;
   },
   stop: function() {
     ball.dir.x = 0;
@@ -207,7 +207,7 @@ function scoreboard() {
   if (game.lives === 2) {
     document.getElementById('life3').setAttribute("src", "img/death.jpg");
   } else if (game.lives === 1) {
-    document.getElementById('life3').setAttribute("src", "img/life.jpg");
+    document.getElementById('life3').setAttribute("src", "img/death.jpg");
     document.getElementById('life2').setAttribute("src", "img/death.jpg");
   } else if (game.lives === 0) {
     document.getElementById('life1').setAttribute("src", "img/death.jpg");
@@ -243,8 +243,14 @@ function start() {
 };
 start();
 
+function stop() {
+  document.getElementById('stop').onclick = function() {
+    ball.stopped = true;
+  }
+};
+stop();
+
 function animateCanvas() {
-  console.log(ball.dir);
   ctx.clearRect(0, 0, canvasSize.width, canvasSize.height);
   paddle.move();
   ball.move();
@@ -261,13 +267,25 @@ function animateCanvas() {
 animateCanvas();
 
 function endTurn() {
-  ball.stopped = true;
-  game.lives - 1;
-  paddle.init();
-  ball.init();
-  start();
-  console.log('end turn run');
+  if (game.lives > 0) {
+    ball.stopped = true;
+    game.lives = game.lives - 1;
+    paddle.init();
+    ball.init();
+    start();
+  }
+  else {
+    gameOver();
+  }
 };
+
+function gameWin() {
+  if (brick.loc.length == 0) {
+    alert("You Win!");
+  }
+  else {};
+}
+gameWin();
 
 function gameOver() {
   alert('game over');

@@ -1,87 +1,53 @@
-/*
-* {
-	border: 1px solid black;
-}
-*/
-
 canvas {
-	background-color: rgb(180, 180, 180);
+	background-color: rgb(200,200,200);
 }
 
-<<<<<<< HEAD
 * {
 	border: 1px solid black;
 }
 
 img {
 	width: 20px;
+	height: 20px;
+	padding: 0;
+	margin: 0;
+	float: left;
+}
+
+#start {
+	float: left;
+	width: 600px;
+	height: 30px;
+	background-color: #222324;
+	padding: 0;
+	margin: 0;
+}
+
+#stop {
+	float: left;
+	width: 600px;
+	height: 30px;
+	background-color: #222324;
+	padding: 0;
+	margin: 0;
+}
+
+
+h1 {
+	float: left;
+	width: 600px;
+	height: 30px;
+	background-color: #222324;
+	padding: 0;
+	margin: 0;
+	font-family: Verdana;
+	color: #C0C3C4;
+	text-transform: capitalize;
+	text-align: center;
+	font-weight: 600;
+	font-size: 20px;
 }
 
 #scoreboard {
 	background-color: rbg(13,133,133);
 }
-
-/*
-<div class = "container">
-	<div class = "canvas">
-		<canvas id='myCanvas'></canvas>
-	</div>
-	<div id = "scoreboard">
-		<div id = "lives">
-			<h4>Turns:</h4>
-			<img id = "life1">X</img>
-			<img id = "life2">X</img>
-			<img id = "life3">X</img>
-		</div>
-		<div id = "score"> 10,000
-	*/
-=======
-#container {
-	display: flex;
-}
-
-# header {
-
-}
-
-.title {
-	text-align: center;
-	text-transform: capitalize;
-}
-
-.game {
-	width: 100%;
-	min-width: 400px,
-}
-
-.scoreboard {
-	display: flex;
-	
-}
-
-.gamewindow {
-
-}
-
-#myCanvas {
-
-}
-
-
-.instructions {
-
-}
-
-p {
-
-}
-
-.footer {}
-
-}
-
-a {
-	color: green;
-	font-weight: bold;
-}
->>>>>>> 0a8f326018fbce1b2af07289bdcafa27cddbcd31
