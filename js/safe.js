@@ -13,35 +13,6 @@ var drawCanvas = function() {
 };
 drawCanvas();
 
-//SCOREBOARD_____
-var game = {
-  lives: 3,
-  score: 0,
-  init: function() {
-    lives = 3;
-    score = 0;
-  }
-}
-
-//display lives on the screen
-function lifeDisplay() {
-  if (game.lives === 2) {
-    document.getElementById('life3').setAttribute("src", "img/death/jpg");
-  } else if (game.lives === 1) {
-    document.getElementById('life3').setAttribute("src", "img/life/jpg");
-    document.getElementById('life2').setAttribute("src", "img/death/jpg");
-  } else if (game.lives === 0) {
-    document.getElementById('life1').setAttribute("src", "img/deaht/jpg");
-    document.getElementById('life2').setAttribute("src", "img/death/jpg");
-    document.getElementById('life3').setAttribute("src", "img/death/jpg");
-  }
-  console.log('lifeDislay');
-};
-
-//push score to screen
-document.getElementById('score').textContent = "Score: " + game.score;
-
-
 //PADDLE_________
 var paddle = {
   loc:{},
@@ -82,6 +53,15 @@ document.addEventListener('keydown', function(event){
   }
 });
 
+document.addEventListener('keyup', function(event){
+  var key = event.which;
+  if(key === 39){
+    paddle.dir = "";
+  } else if (key === 37){
+    paddle.dir = "";
+  }
+});
+
 //BALL___________
 var ball = {
   loc: {},
@@ -97,6 +77,7 @@ var ball = {
     ball.dir.x = 0;
     ball.dir.y = 0;
   },
+  stopped: true,
   draw: function() {
     ctx.beginPath();
     ctx.arc(ball.loc.x, ball.loc.y, ball.r, 0, Math.PI * 2, true);
@@ -105,15 +86,16 @@ var ball = {
     ctx.fill();
   },
   move: function() {
+    if(ball.stopped) {
+      return
+    }
     //check for collision with top
-    if (ball.loc.y + ball.dir.y - ball.r <= 0){
+    if (ball.loc.y + ball.dir.y - ball.r < 0){
       ball.dir.y = -ball.dir.y;
     }
     //check for collision with bottom/turn over
-    if (ball.loc.y + ball.dir.y + ball.r > canvasSize.height) {
-      ball.loc.x = ball.loc.x;
-      ball.loc.y = canvasSize.height - ball.r;
-      turnOver();
+    if (ball.loc.y + ball.r > paddle.loc.y + paddle.height) {
+      endTurn();
     }
     //check for collision with sides
     if (ball.loc.x + ball.dir.x - ball.r < 0 ||
@@ -133,19 +115,19 @@ var ball = {
     //check for collision with bricks
     for (i = 0; i < brick.loc.length; i++) {
       //if ball.loc x is greater than brick x location
-      if (ball.loc.x + ball.dir.x + ball.r >= brick.loc[i][0] &&
+      if (ball.loc.x + ball.dir.x + ball.r > brick.loc[i][0] &&
         //and ball.loc x is less than brick x location + brick.width
-        ball.loc.x + ball.dir.x - ball.r <= brick.loc[i][0] + brick.width &&
+        ball.loc.x + ball.dir.x - ball.r < brick.loc[i][0] + brick.width &&
         //and ball.loc y is less than brick y loc
-        ball.loc.y + ball.dir.y + ball.r >= brick.loc[i][1] &&
+        ball.loc.y + ball.dir.y + ball.r > brick.loc[i][1] &&
         //and ball.loc y is greater than brick y loc + brick.height
-        ball.loc.y + ball.dir.y - ball.r <= brick.loc[i][1] + brick.height) {
+        ball.loc.y + ball.dir.y - ball.r < brick.loc[i][1] + brick.height) {
           //check if ball hit brick - dir.x
           if (ball.loc.x + ball.r < brick.loc[i][0] ||
             ball.loc.x - ball.r > brick.loc[i][0] + brick.width &&
             //and if ball loc was inside y sides
-            ball.loc.y + ball.r <= brick.loc[i][1] &&
-            ball.loc.y - ball.r >= brick.loc[i][1] + brick.height) {
+            ball.loc.y + ball.r < brick.loc[i][1] &&
+            ball.loc.y - ball.r > brick.loc[i][1] + brick.height) {
               //flip dir.x
               ball.dir.x = - ball.dir.x;
               //return hit - delete brick, add to score
@@ -154,8 +136,8 @@ var ball = {
           }
           else if (ball.loc.y + ball.r < brick.loc[i][1] ||
             ball.loc.y - ball.r > brick.loc[i][1] + brick.height &&
-            ball.loc.x + ball.r >= brick.loc[i][0] &&
-            ball.loc.x - ball.r <= brick.loc[i][0] + brick.width) {
+            ball.loc.x + ball.r > brick.loc[i][0] &&
+            ball.loc.x - ball.r < brick.loc[i][0] + brick.width) {
               ball.dir.y = -ball.dir.y;
               brick.destroyed.push(brick.loc[i]);
               brick.hit();
@@ -193,7 +175,7 @@ var brick = {
       };
   },
   hit: function() {
-    score++;
+    game.score += 5;
     for (i = 0; i < brick.destroyed.length; i++) {
       brick.loc = brick.loc.filter(function(event) {
         return event !== brick.destroyed[i];
@@ -202,55 +184,91 @@ var brick = {
   }
 } //end brick
 
-//add the ball, paddle to the screen
-game.init();
-paddle.init();
-paddle.draw();
-ball.init();
-ball.draw();
-brick.init();
-brick.draw();
-gameStart();
-
-function gameStart() {
-  if(lives > 0) {
-    document.addEventListener('keydown', function(event){
-      var key = event.which;
-      if (key === 32) {
-        animateCanvas();
-        lifeDisplay();
-        game();
-      }
-      else {
-      }
-    })
+//SCOREBOARD_____
+var game = {
+  lives: 3,
+  score: "0",
+  pointsPerBrick: 5,
+  init: function() {
+    game.lives = 3;
   }
-  else {
-    //alert("game over");
+}
+
+function scoreKeep() {
+  if (brick.destroyed.length === 0) {
+    game.score = "0";
+  }
+else {
+    game.score = brick.destroyed.length * game.pointsPerBrick;
+  }
+}
+//display scoreboard
+function scoreboard() {
+  if (game.lives === 2) {
+    document.getElementById('life3').setAttribute("src", "img/death.jpg");
+  } else if (game.lives === 1) {
+    document.getElementById('life3').setAttribute("src", "img/life.jpg");
+    document.getElementById('life2').setAttribute("src", "img/death.jpg");
+  } else if (game.lives === 0) {
+    document.getElementById('life1').setAttribute("src", "img/death.jpg");
+    document.getElementById('life2').setAttribute("src", "img/death.jpg");
+    document.getElementById('life3').setAttribute("src", "img/death.jpg");
+  }
+  scoreKeep();
+  document.getElementById('score').textContent = "Score: " + game.score;
+};
+//____________________________________________________
+
+//START BUTTON___
+function init() {
+  game.init();
+  paddle.init();
+  ball.init();
+  brick.init();
+};
+init();
+
+function draw() {
+  paddle.draw();
+  ball.draw();
+  brick.draw();
+  scoreboard();
+};
+draw();
+
+function start() {
+  document.getElementById('start').onclick = function() {
+    ball.stopped = false;
   }
 };
+start();
 
-//animate the canvas
-var animateCanvas = function() {
+function animateCanvas() {
+  console.log(ball.dir);
   ctx.clearRect(0, 0, canvasSize.width, canvasSize.height);
-  ball.move();
-  ball.draw();
   paddle.move();
+  ball.move();
+  brick.hit();
+  ball.draw();
   paddle.draw();
   brick.draw();
-  brick.hit();
+  scoreboard();
   window.requestAnimationFrame(animateCanvas);
-}
+  if (ball.loc.y + ball.r == canvasSize.height) {
+    endTurn();
+  };
+};
+animateCanvas();
 
-var turnOver = function() {
-  ball.stop;
-  //alert("D'oh");
+function endTurn() {
+  ball.stopped = true;
+  game.lives - 1;
   paddle.init();
-  paddle.draw();
   ball.init();
-  ball.draw();
-  lives --;
-  gameStart();
-}
-//
-//paddle collision
+  start();
+  console.log('end turn run');
+};
+
+function gameOver() {
+  alert('game over');
+};
