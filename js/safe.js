@@ -70,8 +70,8 @@ var ball = {
   init: function() {
     ball.loc.x = canvasSize.width/2;
     ball.loc.y = canvasSize.height - 50;
-    ball.dir.x = 2;
-    ball.dir.y = -2;
+    ball.dir.x = 3;
+    ball.dir.y = -3;
   },
   stop: function() {
     ball.dir.x = 0;
@@ -90,54 +90,94 @@ var ball = {
       return
     }
     //check for collision with top
-    if (ball.loc.y + ball.dir.y - ball.r < 0){
+    if (ball.loc.y + ball.dir.y - ball.r <= 0){
       ball.dir.y = -ball.dir.y;
     }
     //check for collision with bottom/turn over
-    if (ball.loc.y + ball.r > paddle.loc.y + paddle.height) {
+    if (ball.loc.y + ball.r >= paddle.loc.y + paddle.height) {
       endTurn();
     }
     //check for collision with sides
-    if (ball.loc.x + ball.dir.x - ball.r < 0 ||
-      ball.loc.x + ball.dir.x + ball.r > canvasSize.width) {
+    if (ball.loc.x + ball.dir.x - ball.r <= 0 ||
+      ball.loc.x + ball.dir.x + ball.r >= canvasSize.width) {
       ball.dir.x = - ball.dir.x;
     }
     //check for collision with paddle
     //if ball location is at least paddle y loc
     if (ball.loc.y + ball.dir.y + ball.r >= paddle.loc.y) {
-      //and if the ball x loc is on the paddle
-      if (ball.loc.x + ball.dir.x >= paddle.loc.x
-        &&
-        ball.loc.x + ball.dir.x <= paddle.loc.x + paddle.width) {
-          ball.dir.y = - ball.dir.y;
+      //if ball loc is on top of the paddle
+      if (ball.loc.x + ball.dir.x >= paddle.loc.x &&
+        ball.loc.x + ball.dir.x <+paddle.loc.x + paddle.width) {
+        //if the ball is between paddle.loc.x and paddle.loc.x +33
+        if(ball.loc.x + ball.dir.x >= paddle.loc.x &&
+          ball.loc.x + ball.dir.x < paddle.loc.x + 33) {
+            console.log("paddle left");
+            //if ball.dir.x >= 3, dir = 3
+            if (paddle.dir.x > 0) {
+              paddle.dir.x = 3;
+            } //else if paddle.dir x < 0, dir = -3
+            else if (paddle.dir.x < 0) {
+              paddle.dir.x =-3;
+            }
+            console.log(ball.dir);
+          }
+      //if the ball is between paddle.loc.x + 33 and paddle.loc.x +63
+      if(ball.loc.x + ball.dir.x >= paddle.loc.x + 33 &&
+        ball.loc.x + ball.dir.x < paddle.loc.x + 63) {
+          console.log("paddle middle");
+          //if ball.dir.x >= 3, dir = 3
+          if (paddle.dir.x >= 3) {
+            paddle.dir.x = paddle.dir.x - 2;
+            console.log(-2);
+          } //else if paddle.dir x < 0, dir = -3
+          else if (paddle.dir.x <= -3 ) {
+            paddle.dir.x = paddle.dir.x + 2;
+            console.log(+2);
+          }
+          console.log(ball.dir);
         }
+      //if the ball is between paddle.loc.x + 63 and paddle.loc.x + paddle.width
+      if(ball.loc.x + ball.dir.x >= paddle.loc.x + 63 &&
+        ball.loc.x + ball.dir.x < paddle.loc.x + paddle.width) {
+          console.log("paddle right");
+          //if ball.dir.x >= 3, dir = 3
+          if (paddle.dir.x > 0) {
+            paddle.dir.x = 3;
+          } //else if paddle.dir x < 0, dir = -3
+          else if (paddle.dir.x < 0) {
+            paddle.dir.x =-3;
+          }
+          console.log(ball.dir);
+        }
+        ball.dir.y = -ball.dir.y;
+      }
     }
     //check for collision with bricks
     for (i = 0; i < brick.loc.length; i++) {
       //if ball.loc x is greater than brick x location
-      if (ball.loc.x + ball.dir.x + ball.r > brick.loc[i][0] &&
+      if (ball.loc.x + ball.dir.x + ball.r >= brick.loc[i][0] &&
         //and ball.loc x is less than brick x location + brick.width
-        ball.loc.x + ball.dir.x - ball.r < brick.loc[i][0] + brick.width &&
+        ball.loc.x + ball.dir.x - ball.r <= brick.loc[i][0] + brick.width &&
         //and ball.loc y is less than brick y loc
-        ball.loc.y + ball.dir.y + ball.r > brick.loc[i][1] &&
+        ball.loc.y + ball.dir.y + ball.r >= brick.loc[i][1] &&
         //and ball.loc y is greater than brick y loc + brick.height
-        ball.loc.y + ball.dir.y - ball.r < brick.loc[i][1] + brick.height) {
+        ball.loc.y + ball.dir.y - ball.r <= brick.loc[i][1] + brick.height) {
           //check if ball hit brick - dir.x
-          if (ball.loc.x + ball.r < brick.loc[i][0] ||
-            ball.loc.x - ball.r > brick.loc[i][0] + brick.width &&
+          if (ball.loc.x + ball.r <= brick.loc[i][0] ||
+            ball.loc.x - ball.r >= brick.loc[i][0] + brick.width &&
             //and if ball loc was inside y sides
-            ball.loc.y + ball.r > brick.loc[i][1] &&
-            ball.loc.y - ball.r < brick.loc[i][1] + brick.height) {
+            ball.loc.y + ball.r >= brick.loc[i][1] &&
+            ball.loc.y - ball.r <= brick.loc[i][1] + brick.height) {
               //flip dir.x
               ball.dir.x = - ball.dir.x;
               //return hit - delete brick, add to score
               brick.destroyed.push(brick.loc[i]);
               brick.hit();
           }
-          else if (ball.loc.y + ball.r < brick.loc[i][1] ||
-            ball.loc.y - ball.r > brick.loc[i][1] + brick.height &&
-            ball.loc.x + ball.r > brick.loc[i][0] &&
-            ball.loc.x - ball.r < brick.loc[i][0] + brick.width) {
+          else if (ball.loc.y + ball.r <= brick.loc[i][1] ||
+            ball.loc.y - ball.r >= brick.loc[i][1] + brick.height &&
+            ball.loc.x + ball.r >= brick.loc[i][0] &&
+            ball.loc.x - ball.r <= brick.loc[i][0] + brick.width) {
               ball.dir.y = -ball.dir.y;
               brick.destroyed.push(brick.loc[i]);
               brick.hit();
