@@ -126,8 +126,8 @@ var ball = {
           if (ball.loc.x + ball.r < brick.loc[i][0] ||
             ball.loc.x - ball.r > brick.loc[i][0] + brick.width &&
             //and if ball loc was inside y sides
-            ball.loc.y + ball.r < brick.loc[i][1] &&
-            ball.loc.y - ball.r > brick.loc[i][1] + brick.height) {
+            ball.loc.y + ball.r > brick.loc[i][1] &&
+            ball.loc.y - ball.r < brick.loc[i][1] + brick.height) {
               //flip dir.x
               ball.dir.x = - ball.dir.x;
               //return hit - delete brick, add to score
