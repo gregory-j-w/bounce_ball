@@ -94,7 +94,7 @@ var ball = {
       ball.dir.y = -ball.dir.y;
     }
     //check for collision with bottom/turn over
-    if (ball.loc.y + ball.r >= paddle.loc.y + paddle.height) {
+    if (ball.loc.y - ball.r >= canvasSize.height) {
       endTurn();
     }
     //check for collision with sides
@@ -216,6 +216,7 @@ var brick = {
   },
   hit: function() {
     game.score += 5;
+    gameWin();
     for (i = 0; i < brick.destroyed.length; i++) {
       brick.loc = brick.loc.filter(function(event) {
         return event !== brick.destroyed[i];
@@ -320,13 +321,17 @@ function endTurn() {
 };
 
 function gameWin() {
-  if (brick.loc.length == 0) {
-    alert("You Win!");
+  if (brick.loc.length == brick.destroyed.length) {
+    console.log("game win check");
+    ball.stoped = true;
+    ctx.font = "48px serif";
+    ctx.fillStyle = "black";
+    ctx.fillText("YOU WIN!!!!!!!!", 200, canvasSize.height/2);
   }
-  else {};
-}
-gameWin();
+};
 
 function gameOver() {
-  alert('game over');
+  ball.stopped = true;
+  ctx.font = "48px serif";
+  ctx.fillText("GAME OVER", 200, canvasSize.height/2);
 };
